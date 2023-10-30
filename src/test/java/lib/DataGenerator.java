@@ -1,5 +1,6 @@
 package lib;
 
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,6 +11,11 @@ public class DataGenerator {
     public static String getRandomEmail(){
         String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         return "learnqa" + timestamp + "@example.com";
+    }
+
+    public static String getRandomInvalidEmail(){
+        String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        return "learnqa" + timestamp + "example.com";
     }
 
     public static Map<String,String> getRegistrationData(){
@@ -37,5 +43,16 @@ public class DataGenerator {
         }
         return userData;
     }
+
+    public static String getStringOfNeededLength(int length){
+        String ABC = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+        SecureRandom rnd = new SecureRandom();
+        StringBuilder sb = new StringBuilder(length);
+        for(int i=0; i<length; i++){
+            sb.append(ABC.charAt(rnd.nextInt(ABC.length())));
+        }
+        return sb.toString();
+    }
+
 
 }
