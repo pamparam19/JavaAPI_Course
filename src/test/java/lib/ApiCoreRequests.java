@@ -48,4 +48,25 @@ public class ApiCoreRequests {
                 .andReturn();
     }
 
+    @Step("Make a PUT-Request not authorized")
+    public Response makeNonAuthPutRequest(String url, Map<String, String> body){
+        return given()
+                .filter(new AllureRestAssured())
+                .body(body)
+                .put(url)
+                .andReturn();
+    }
+
+    @Step("Make an authorized PUT-Request")
+    public Response makeAuthPutRequest(String url, String header, String cookie, Map<String, String> body){
+        return given()
+                .filter(new AllureRestAssured())
+                .header(new Header("x-csrf-token",header))
+                .cookie("auth_sid", cookie)
+                .body(body)
+                .put(url)
+                .andReturn();
+    }
+
+
 }
