@@ -1,11 +1,15 @@
 package tests.fwTests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -15,6 +19,8 @@ import java.util.Map;
 
 import static lib.DataGenerator.getRandomInvalidEmail;
 
+@Epic("User registration cases")
+@Feature("Registration")
 public class UserRegisterTest extends BaseTestCase {
     private static final String USER_URL = "https://playground.learnqa.ru/api/user/";
     private static final int BAD_REQUEST = 400;
@@ -22,6 +28,8 @@ public class UserRegisterTest extends BaseTestCase {
     public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
     @Test
+    @Description("The test checks that it is impossible to create a new user with an email that is already in use")
+    @DisplayName("Negative case, Register a new user with an email already in use")
     public void testCreateUserWithExistingEmail(){
         String email = "vinkotov@example.com";
         Map<String, String> userData = new HashMap<>();
@@ -40,6 +48,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test for a successful registration of a new user with valid registration data")
+    @DisplayName("Test positive new user registration")
     public void createUserSuccessfully(){
         Map<String, String> userData = DataGenerator.getRegistrationData();
 
@@ -55,6 +65,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it is impossible to create a new user with an invalid email")
+    @DisplayName("Test negative user registration with an invalid email")
     public void createUserInvalidEmail(){
         String email = getRandomInvalidEmail();
         Map<String, String> userData = DataGenerator.getRegistrationData();
@@ -69,6 +81,8 @@ public class UserRegisterTest extends BaseTestCase {
 
 
     @ParameterizedTest
+    @Description("The test checks user registration data validation for every required attribute")
+    @DisplayName("Test negative user registration case when any of the required attributes missing")
     @ValueSource(strings = {"username", "firstName", "lastName", "email", "password"})
     public void testInvalidRequestValidation(String attribute){
         Map<String, String> userData = DataGenerator.getRegistrationData();
@@ -82,6 +96,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it is not possible to create a new user with invalid first name value")
+    @DisplayName("Test negative user registration case, first name is too short")
     public void testShortNameReg(){
         String firstName = DataGenerator.getStringOfNeededLength(1);
         Map<String, String> userData = DataGenerator.getRegistrationData();
@@ -96,6 +112,8 @@ public class UserRegisterTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it is not possible to create a new user with invalid first name value")
+    @DisplayName("Test negative user registration case, first name is too short")
     public void testLongNameReg(){
         String firstName = DataGenerator.getStringOfNeededLength(251);
         Map<String, String> userData = DataGenerator.getRegistrationData();

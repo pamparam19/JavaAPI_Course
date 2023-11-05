@@ -1,5 +1,8 @@
 package tests.fwTests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -7,6 +10,7 @@ import lib.ApiCoreRequests;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.crypto.Data;
@@ -14,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SimpleTimeZone;
 
+@Epic("Edit user cases")
+@Feature("Edit user")
 public class UserEditTest extends BaseTestCase {
 
     public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
@@ -26,6 +32,8 @@ public class UserEditTest extends BaseTestCase {
     private String userIdForTest;
 
     @Test
+    @Description("The test checks that user data can be edited for newly created user after authorization")
+    @DisplayName("Positive case, edit user data for authorized user")
     public void testEditJustCreated(){
         //generate user
         Map<String, String> userData = DataGenerator.getRegistrationData();
@@ -74,6 +82,8 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it's impossible to edit user data without authorization")
+    @DisplayName("Negative case, Edit user data without authorization")
     public void testEditNotAuth(){
         Map<String, String> userData = DataGenerator.getRegistrationData();
         Response responseNewUser = apiCoreRequests
@@ -92,6 +102,8 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it's impossible to edit user data being authorized as another user")
+    @DisplayName("Negative case, edit user data being logged in as another user")
     public void testEditAuthAsAnotherUser(){
 
         //create the first user (to be changed)
@@ -132,6 +144,8 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it is impossible to replace user email with invalid value")
+    @DisplayName("Negative case, replacing user email with invalid value (no @)")
     public void testEditEmail(){
         Map<String, String> userData = DataGenerator.getRegistrationData();
         Response responseCreateFirstUser = apiCoreRequests
@@ -162,6 +176,8 @@ public class UserEditTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it is impossible to replace user name with invalid value (too short")
+    @DisplayName("Negative case, replacing user name with an invalid value (length = 1 symbol)")
     public void testChangeFirstName(){
         Map<String, String> userData = DataGenerator.getRegistrationData();
         Response responseCreateFirstUser = apiCoreRequests

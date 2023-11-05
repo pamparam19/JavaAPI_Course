@@ -1,15 +1,22 @@
 package tests.fwTests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
+
+@Epic("Get user data cases")
+@Feature("Get user information")
 
 public class UserGetTest extends BaseTestCase {
     private static final String USER_URL = "https://playground.learnqa.ru/api/user/";
@@ -33,6 +40,8 @@ public class UserGetTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that an authorised user can get full user information")
+    @DisplayName("Positive test, getting user info after authorization")
     public void testGetUserDataAuthAsSameUser(){
         Map<String, String> authData = new HashMap<>();
         authData.put("email", "vinkotov@example.com");
@@ -60,6 +69,8 @@ public class UserGetTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it is impossible to get full user information being authorized as another user")
+    @DisplayName("Negative case, getting user information being logged in as another user")
     public void testGetUserDataAuthAsDifUser(){
         Map<String, String> userData = DataGenerator.getRegistrationData();
         Response responseRegNewUser = apiCoreRequests

@@ -1,16 +1,22 @@
 package tests.fwTests;
 
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import io.restassured.response.Response;
 import lib.ApiCoreRequests;
 import lib.Assertions;
 import lib.BaseTestCase;
 import lib.DataGenerator;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.xml.crypto.Data;
 import java.util.HashMap;
 import java.util.Map;
 
+@Epic("Delete user cases")
+@Feature("Deleting user")
 public class UserDeleteTest extends BaseTestCase {
     public final ApiCoreRequests apiCoreRequests = new ApiCoreRequests();
 
@@ -28,6 +34,8 @@ public class UserDeleteTest extends BaseTestCase {
     String header;
 
     @Test
+    @Description("This test checks that user with ID=2 cannot be deleted")
+    @DisplayName("Delete a User with ID = 2")
     public void testDeleteTestUser(){
         Map<String, String> authData = new HashMap<>();
         authData.put("email", TEST_EMAIL);
@@ -49,6 +57,8 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that a newly created user can be successfully deleted after authorization")
+    @DisplayName("Positive test, deleting a user")
     public void testDeleteJustCreated(){
         Map<String, String> regData = DataGenerator.getRegistrationData();
         Response newUser = apiCoreRequests
@@ -77,6 +87,8 @@ public class UserDeleteTest extends BaseTestCase {
     }
 
     @Test
+    @Description("The test checks that it is impossible to delete a user being logged in as another user")
+    @DisplayName("Negative test. Deleting a user being logged in as another user")
     public void testDeleteAuthAnotherUser(){
         Map<String, String> regData = DataGenerator.getRegistrationData();
         Response newUser = apiCoreRequests
@@ -96,6 +108,7 @@ public class UserDeleteTest extends BaseTestCase {
 
         Response responseDelete = apiCoreRequests
                 .makeDeleteRequest(USER_URL + userId, header, cookie);
+        responseDelete.then().log().all();
 
         Assertions.assertResponseCodeEquals(responseDelete, BAD_REQUEST);
     }
